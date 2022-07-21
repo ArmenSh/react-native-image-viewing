@@ -24,11 +24,11 @@ import StatusBarManager from "./components/StatusBarManager";
 import useAnimatedComponents from "./hooks/useAnimatedComponents";
 import useImageIndexChange from "./hooks/useImageIndexChange";
 import useRequestClose from "./hooks/useRequestClose";
-import { ImageSource } from "./@types";
+import { ImageSource, ImageViewingDataType, VideoItemComponentProps } from "./@types";
 
 type Props = {
-  images: ImageSource[];
-  keyExtractor?: (imageSrc: ImageSource, index: number) => string;
+  data: ImageViewingDataType[];
+  keyExtractor?: (item: ImageViewingDataType, index: number) => string;
   imageIndex: number;
   visible: boolean;
   onRequestClose: () => void;
@@ -42,6 +42,7 @@ type Props = {
   delayLongPress?: number;
   HeaderComponent?: ComponentType<{ imageIndex: number }>;
   FooterComponent?: ComponentType<{ imageIndex: number }>;
+  VideoItemComponent?: ComponentType<VideoItemComponentProps>;
 };
 
 const DEFAULT_ANIMATION_TYPE = "fade";
@@ -51,7 +52,7 @@ const SCREEN = Dimensions.get("screen");
 const SCREEN_WIDTH = SCREEN.width;
 
 function ImageViewing({
-  images,
+  data,
   keyExtractor,
   imageIndex,
   visible,
@@ -66,8 +67,9 @@ function ImageViewing({
   delayLongPress = DEFAULT_DELAY_LONG_PRESS,
   HeaderComponent,
   FooterComponent,
+  VideoItemComponent,
 }: Props) {
-  const imageList = React.createRef<VirtualizedList<ImageSource>>();
+  const imageList = React.createRef<VirtualizedList<ImageViewingDataType>>();
   const [opacity, onRequestCloseEnhanced] = useRequestClose(onRequestClose);
   const [currentImageIndex, onScroll] = useImageIndexChange(imageIndex, SCREEN);
   const [
@@ -120,7 +122,7 @@ function ImageViewing({
         </Animated.View>
         <VirtualizedList
           ref={imageList}
-          data={images}
+          data={data}
           horizontal
           pagingEnabled
           windowSize={2}
@@ -129,17 +131,23 @@ function ImageViewing({
           showsHorizontalScrollIndicator={false}
           showsVerticalScrollIndicator={false}
           initialScrollIndex={imageIndex}
-          getItem={(_, index) => images[index]}
-          getItemCount={() => images.length}
+          getItem={(_, index) => data[index]}
+          getItemCount={() => data.length}
           getItemLayout={(_, index) => ({
             length: SCREEN_WIDTH,
             offset: SCREEN_WIDTH * index,
             index,
           })}
-          renderItem={({ item: imageSrc }) => (
+          renderItem={({ item: {videoUri, imageSource} }) => videoUri && VideoItemComponent ? (
+            React.createElement(VideoItemComponent, {
+              imageSource,
+              videoUri,
+              onRequestHideHeader: onZoom,
+            })
+          ) : (
             <ImageItem
               onZoom={onZoom}
-              imageSrc={imageSrc}
+              imageSrc={imageSource}
               onRequestClose={onRequestCloseEnhanced}
               onLongPress={onLongPress}
               delayLongPress={delayLongPress}
@@ -148,8 +156,8 @@ function ImageViewing({
             />
           )}
           onMomentumScrollEnd={onScroll}
-          //@ts-ignore
-          keyExtractor={(imageSrc, index) => keyExtractor ? keyExtractor(imageSrc, index) : imageSrc.uri || `${imageSrc}`}
+          // @ts-ignore
+          keyExtractor={(item, index) => keyExtractor ? keyExtractor(item, index) : item.imageSource.uri || `${item.imageSrc}`}
         />
         {typeof FooterComponent !== "undefined" && (
           <Animated.View

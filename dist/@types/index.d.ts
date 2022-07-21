@@ -15,3 +15,10 @@ export declare type Position = {
     y: number;
 };
 export declare type ImageSource = ImageURISource | ImageRequireSource;
+export declare type ImageViewingDataType = {
+    imageSource: ImageSource;
+    videoUri?: string;
+};
+export declare type VideoItemComponentProps = ImageViewingDataType & {
+    onRequestHideHeader?(hidden: boolean): void;
+};

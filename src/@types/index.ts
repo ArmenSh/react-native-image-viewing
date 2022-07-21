@@ -19,3 +19,12 @@ export type Position = {
 };
 
 export type ImageSource = ImageURISource | ImageRequireSource;
+
+export type ImageViewingDataType = {
+  imageSource: ImageSource;
+  videoUri?: string;
+}
+
+export type VideoItemComponentProps = ImageViewingDataType & {
+  onRequestHideHeader?(hidden: boolean): void;
+}
