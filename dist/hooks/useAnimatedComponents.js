@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  *
  */
-import { Animated } from "react-native";
+import { Animated, StatusBar } from "react-native";
 const INITIAL_POSITION = { x: 0, y: 0 };
 const ANIMATION_CONFIG = {
     duration: 200,
@@ -15,6 +15,7 @@ const useAnimatedComponents = () => {
     const headerTranslate = new Animated.ValueXY(INITIAL_POSITION);
     const footerTranslate = new Animated.ValueXY(INITIAL_POSITION);
     const toggleVisible = (isVisible) => {
+        StatusBar.setHidden(!isVisible);
         if (isVisible) {
             Animated.parallel([
                 Animated.timing(headerTranslate.y, { ...ANIMATION_CONFIG, toValue: 0 }),

@@ -6,7 +6,7 @@
  *
  */
 
-import { Animated } from "react-native";
+import { Animated, StatusBar } from "react-native";
 
 const INITIAL_POSITION = { x: 0, y: 0 };
 const ANIMATION_CONFIG = {
@@ -19,6 +19,7 @@ const useAnimatedComponents = () => {
   const footerTranslate = new Animated.ValueXY(INITIAL_POSITION);
 
   const toggleVisible = (isVisible: boolean) => {
+    StatusBar.setHidden(!isVisible);
     if (isVisible) {
       Animated.parallel([
         Animated.timing(headerTranslate.y, { ...ANIMATION_CONFIG, toValue: 0 }),
