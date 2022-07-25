@@ -52,7 +52,8 @@ function ImageViewing({ data, keyExtractor, imageIndex, visible, onRequestClose,
         length: SCREEN_WIDTH,
         offset: SCREEN_WIDTH * index,
         index,
-    })} renderItem={({ item: { videoUri, imageSource } }) => videoUri && VideoItemComponent ? (React.createElement(VideoItemComponent, {
+    })} extraData={currentImageIndex} renderItem={({ item: { videoUri, imageSource }, index }) => videoUri && VideoItemComponent ? (React.createElement(VideoItemComponent, {
+        isActive: index === currentImageIndex,
         imageSource,
         videoUri,
         onRequestHideHeader: onZoom,

@@ -141,8 +141,10 @@ function ImageViewing({
               offset: SCREEN_WIDTH * index,
               index,
             })}
-            renderItem={({ item: {videoUri, imageSource} }) => videoUri && VideoItemComponent ? (
+            extraData={currentImageIndex}
+            renderItem={({ item: {videoUri, imageSource}, index }) => videoUri && VideoItemComponent ? (
               React.createElement(VideoItemComponent, {
+                isActive: index === currentImageIndex,
                 imageSource,
                 videoUri,
                 onRequestHideHeader: onZoom,

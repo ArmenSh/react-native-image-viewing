@@ -20,5 +20,6 @@ export declare type ImageViewingDataType = {
     videoUri?: string;
 };
 export declare type VideoItemComponentProps = ImageViewingDataType & {
+    isActive: boolean;
     onRequestHideHeader?(hidden: boolean): void;
 };
