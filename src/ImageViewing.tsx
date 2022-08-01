@@ -27,7 +27,7 @@ import useImageIndexChange from "./hooks/useImageIndexChange";
 import useRequestClose from "./hooks/useRequestClose";
 import { ImageSource, ImageViewingDataType, VideoItemComponentProps } from "./@types";
 
-type Props = {
+export type ImageViewingPropsType = {
   data: ImageViewingDataType[];
   keyExtractor?: (item: ImageViewingDataType, index: number) => string;
   imageIndex: number;
@@ -69,7 +69,7 @@ function ImageViewing({
   HeaderComponent,
   FooterComponent,
   VideoItemComponent,
-}: Props) {
+}: ImageViewingPropsType) {
   const imageList = React.createRef<VirtualizedList<ImageViewingDataType>>();
   const [opacity, onRequestCloseEnhanced] = useRequestClose(onRequestClose);
   const [currentImageIndex, onScroll] = useImageIndexChange(imageIndex, SCREEN);
@@ -198,7 +198,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const EnhancedImageViewing = (props: Props) => (
+const EnhancedImageViewing = (props: ImageViewingPropsType) => (
   <ImageViewing key={props.imageIndex} {...props} />
 );
 

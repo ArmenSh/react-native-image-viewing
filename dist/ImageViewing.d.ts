@@ -8,7 +8,7 @@
 import { ComponentType } from "react";
 import { ModalProps } from "react-native";
 import { ImageSource, ImageViewingDataType, VideoItemComponentProps } from "./@types";
-declare type Props = {
+export declare type ImageViewingPropsType = {
     data: ImageViewingDataType[];
     keyExtractor?: (item: ImageViewingDataType, index: number) => string;
     imageIndex: number;
@@ -30,5 +30,5 @@ declare type Props = {
     }>;
     VideoItemComponent?: ComponentType<VideoItemComponentProps>;
 };
-declare const EnhancedImageViewing: (props: Props) => JSX.Element;
+declare const EnhancedImageViewing: (props: ImageViewingPropsType) => JSX.Element;
 export default EnhancedImageViewing;
